@@ -129,3 +129,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+vision/object_detection/models/yolov3.cfg
+vision/object_detection/models/yolov3-tiny.cfg
+vision/object_detection/models/coco.names
+.vscode/settings.json
