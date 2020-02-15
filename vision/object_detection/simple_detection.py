@@ -6,8 +6,8 @@ import os.path
 import time
 
 # Analyse one image out of 15
-SKIP_IMAGE = 10 
-
+SKIP_IMAGE = 2
+TINY_MODEL = True
 
 # Get the names of the output layers
 def getOutputsNames(net):
@@ -17,7 +17,14 @@ def getOutputsNames(net):
     return [layersNames[i[0] -1] for i in net.getUnconnectedOutLayers()]
 
 # Load Yolo
-net = cv2.dnn.readNet("models/yolov3-tiny.cfg", "models/yolov3-tiny.weights")
+if TINY_MODEL:
+    cfg = "models/yolov3-tiny.cfg"
+    weights = "models/yolov3-tiny.weights"
+else:
+    cfg = "models/yolov3.cfg"
+    weights = "models/yolov3.weights"
+
+net = cv2.dnn.readNet(cfg, weights)
 net.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
 net.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)
 classes = []
@@ -31,7 +38,7 @@ colors = np.random.uniform(0, 255, size=(len(classes), 3))
 # Process output
 outputFile = 'output/results.avi'
 
-cap = cv2.VideoCapture('videos/BBQ1.mp4')
+cap = cv2.VideoCapture('videos/dog_720p.mp4')
 video_writer = cv2.VideoWriter(outputFile, cv2.VideoWriter_fourcc('M','J','P','G'), 30, (round(cap.get(cv2.CAP_PROP_FRAME_WIDTH)), round(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))))
 
 img_count = 0
@@ -96,9 +103,9 @@ while cv2.waitKey(1) < 0:
     #combinedImages = np.concatenate((origImg, img), axis=1)
     # Write image
     end_timeframe = time.time()
-    print('img #:{0} | FPS : {1:%2f}'.format(img_count, 1/(end_timeframe - start_timeframe)))
+    print('img #:{0} | FPS : {1:2f}'.format(img_count, 1/(end_timeframe - start_timeframe)))
     img_count = img_count + 1
     skipper += 1
     video_writer.write(img.astype(np.uint8))
 processing_time = time.time() - start_analyse_time
-print('analyse video in {0}s | {1:%2f} FPS'.format(processing_time, img_count/processing_time))
+print('analyse video in {0}s | {1:2f} FPS'.format(processing_time, img_count/processing_time))
