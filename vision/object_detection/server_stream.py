@@ -1,9 +1,21 @@
-# run this program on the Mac to display image streams from multiple RPis
-import cv2
 import imagezmq
+import cv2
+import argparse
+import sys
+import numpy as np 
+import os.path 
+import time
+from image_analysis.detection import Detection
+
+smart = Detection()
+
 image_hub = imagezmq.ImageHub()
-while True:  # show streamed images until Ctrl-C
+while True:
     rpi_name, image = image_hub.recv_image()
-    cv2.imshow(rpi_name, image) # 1 window for each RPi
+    print("received_image")
+    labelled_image = smart.process_image(image)
+    print("processed_image")
+    cv2.imshow(rpi_name, labelled_image)
+    print("Showed image")
     cv2.waitKey(1)
-    image_hub.send_reply(b'OK')
+    image_hub.send_reply(b'OK')  # this statement is missing from your while True loo
