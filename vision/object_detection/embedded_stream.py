@@ -3,7 +3,7 @@ import socket
 import time
 from imutils.video import VideoStream
 import imagezmq
-sender = imagezmq.ImageSender(connect_to='tcp://jeff-macbook:5555')
+sender = imagezmq.ImageSender(connect_to='tcp://172.20.10.9:5555')
 rpi_name = socket.gethostname() # send RPi hostname with each image
 picam = VideoStream(usePiCamera=False).start()
 time.sleep(2.0)  # allow camera sensor to warm up
