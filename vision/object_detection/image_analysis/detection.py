@@ -66,11 +66,11 @@ class Detection:
                     boxes.append([x, y, w, h])
                     confidences.append(float(confidence))
                     class_ids.append(class_id)
-                    print(class_id)
+                    print("Class id : {}, corresponds to : {} (condidence : {:.02f})".format(class_id, str(self.classes[class_id]), float(confidence)))
 
 
         # Remove duplicates
-        
+
         indexes = cv2.dnn.NMSBoxes(boxes, confidences, 0.5, 0.4)
 
         font = cv2.FONT_HERSHEY_PLAIN
@@ -82,5 +82,3 @@ class Detection:
                 cv2.rectangle(img, (x, y), (x + w, y + h), color, 2)
                 cv2.putText(img, label, (x, y + 30), font, 3, color, 3)
         return img
-
-
